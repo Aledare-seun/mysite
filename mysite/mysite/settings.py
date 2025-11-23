@@ -135,8 +135,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-relay.brevo.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = '9c52cc001@smtp-brevo.com'
-EMAIL_HOST_PASSWORD = 'bsk2V6InWLNpvQ6'
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -144,5 +144,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 if "DATABASE_URL" in os.environ:
 
     DATABASES["default"] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
 
 
