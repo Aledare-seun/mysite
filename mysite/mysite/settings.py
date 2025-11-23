@@ -30,7 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "mysite-1-4c6k.onrender.com",
+    "mysite-2-2isw.onrender.com",
 ]
 
 
@@ -144,3 +144,4 @@ MEDIA_ROOT = BASE_DIR / 'media'
 if "DATABASE_URL" in os.environ:
 
     DATABASES["default"] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
