@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container py-4">
+
+    <!-- Header Section -->
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">Welcome, {{ student.email }}!</h2>
+        <p class="text-muted">Department: {{ student.department }} | Level: {{ student.level }}</p>
+    </div>
+
+    <!-- Add Friend Section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Add a Friend</h5>
+
+            <form id="add_friend" method="POST">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Friend Email</label>
+                    <input type="text" name="email" class="form-control" required placeholder="Enter friend's email">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Add Friend</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Friends List -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Your Friends</h5>
+
+            {% if friends %}
+                <div class="list-group">
+
+                    {% for friend in friends %}
+                    <div class="d-flex align-items-center justify-content-between border rounded p-2 mb-2 bg-white">
+
+                        <!-- Chat Button -->
+                        <form action="{% url 'chat' %}" method="post" class="m-0 flex-grow-1">
+                            {% csrf_token %}
+                            <input type="hidden" name="email" value="{{ friend }}">
+                            <button type="submit" class="btn btn-outline-secondary w-100 text-start">
+                                <i class="bi bi-person-circle me-2"></i> {{ friend }}
+                            </button>
+                        </form>
+
+                        <!-- 3 Dots Dropdown -->
+                        <div class="dropdown ms-2">
+                            <button class="btn btn-light border-0" data-bs-toggle="dropdown">
+                                <i class="bi bi-three-dots-vertical fs-5"></i>
+                            </button>
+
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <button 
+                                        class="dropdown-item text-danger" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#deleteFriendModal"
+                                        onclick="setDeleteEmail('{{ friend }}')"
+                                    >
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    {% endfor %}
+
+                </div>
+            {% else %}
+                <p class="text-muted">You have no friends added yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <!-- Logout -->
+    <div class="text-center mt-4">
+        <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+    </div>
+
+</div>
+
+<!-- Bootstrap Icons CDN (Optional for icons) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<!-- Delete Friend Modal -->
+<div class="modal fade" id="deleteFriendModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Remove Friend</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                Are you sure you want to remove <strong id="friendName"></strong> from your friends list?
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                <form id="delete_friend" method="POST" action="{% url 'delete_friend' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="email" id="deleteEmail">
+                    <button type="submit" class="btn btn-danger">Yes, Remove</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+function setDeleteEmail(email) {
+    document.getElementById("deleteEmail").value = email;
+    document.getElementById("friendName").innerText = email;
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+        // Auto-scroll to bottom
+        const box = document.getElementById('messagesBox');
+        box.scrollTop = box.scrollHeight;
+    </script>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const add_friend = document.getElementById("add_friend");
+    if (add_friend) {
+        add_friend.addEventListener("submit", function () {
+            setTimeout(() => location.reload(), 50);
+        });
+    }
+    const delete_friend = document.getElementById("delete_friend");
+    if (delete_friend) {
+        delete_friend.addEventListener("submit", function () {
+            setTimeout(() => location.reload(), 50);
+        });
+    }
+});
+</script>
+</body>
+</html>
