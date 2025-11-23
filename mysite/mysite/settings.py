@@ -27,7 +27,11 @@ SECRET_KEY = 'django-insecure-!pdrv_=9%qb_w&8elh^ysne*tanztt4ckvf4im_dc9sor9m_8u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "mysite-1-4c6k.onrender.com",
+]
 
 
 # Application definition
@@ -138,4 +142,5 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 if "DATABASE_URL" in os.environ:
+
     DATABASES["default"] = dj_database_url.config(conn_max_age=600, ssl_require=True)
